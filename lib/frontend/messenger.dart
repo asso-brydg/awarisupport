@@ -1,8 +1,17 @@
+import '../backend/controllers/support_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'constants.dart';
 import 'chat.dart';
 import 'messenger_detail_screen.dart';
+
+List<Widget> listScreens = [
+  SupportListScreen(),
+  Container(),
+  Container(),
+  Container(),
+];
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({Key? key}) : super(key: key);
@@ -13,12 +22,17 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
+
+  Widget getCurrentScreen(int value) {
+    return listScreens[value];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Body(),
+      body: getCurrentScreen(_selectedIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: kPrimaryColor,
@@ -69,26 +83,30 @@ class _ChatsScreenState extends State<ChatsScreen> {
   }
 }
 
-class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+class SupportListScreen extends StatelessWidget {
+  SupportListScreen({Key? key}) : super(key: key);
+
+  final SupportController supportController = Get.put(SupportController());
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
-            itemCount: chatsData.length,
-            itemBuilder: (context, index) => ChatCard(
-              chat: chatsData[index],
-              press: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MessagesScreen(),
+          child: Obx(() {
+            return ListView.builder(
+              itemCount: supportController.chats.length,
+              itemBuilder: (context, index) => ChatCard(
+                chat: supportController.chats[index],
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MessagesScreen(),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ],
     );

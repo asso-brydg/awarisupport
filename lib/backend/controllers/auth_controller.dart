@@ -1,3 +1,11 @@
 import 'package:get/get.dart';
 
-class AuthController extends GetxController {}
+import '../../frontend/messenger.dart';
+
+class AuthController extends GetxController {
+  @override
+  void onReady() {
+    super.onReady();
+    Get.offAll(() => const ChatsScreen());
+  }
+}
